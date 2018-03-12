@@ -1,7 +1,8 @@
 from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token
 
-from projects.views import CreateUserView, ActivateUser
+from projects.views import ActivateUser, CreateUserView
+
 
 urlpatterns = [
     url(r'^', include('projects.urls')),

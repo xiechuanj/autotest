@@ -50,7 +50,17 @@ class UserSerializer(serializers.ModelSerializer):
     projects = ProjectsSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('username', 'password', 'projects', 'email')
+
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.is_active = False
+        user.save()
+        return user
 
 
 class MenuCategorySerializer3(serializers.ModelSerializer):
