@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from projects.models import TaskSet, Task, TaskSetRun, TaskRun
+from projects.models import TaskSet, Task, TaskSetRun, TaskRun, User, Projects
 
-__author__ = 'bobby'
+__author__ = 'xiechuan'
 
 import django_filters
 from django.db.models import Q
@@ -42,3 +42,21 @@ class TaskRunFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = TaskRun
         fields = ['taskrun_name', 'taskrun_status']
+
+class UserFilter(django_filters.rest_framework.FilterSet):
+    """
+    用户的过滤类
+    """
+
+    class Meta:
+        model = User
+        fields = ['username',]
+
+class ProjectsFilter(django_filters.rest_framework.FilterSet):
+    """
+    项目的过滤类
+    """
+
+    class Meta:
+        model = Projects
+        fields = ['user','project_name']

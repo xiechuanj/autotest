@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
     projects = ProjectsSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ('username', 'password', 'projects', 'email')
+        fields = ('id', 'username', 'password', 'projects', 'email', 'is_superuser')
 
     def create(self, validated_data):
         user = User(

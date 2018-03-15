@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import jwt
 from django.http import HttpResponse
-from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
-from autotest.filters import TaskSetFilter, TaskFilter, TaskSetRunFilter, TaskRunFilter
+from projects.filters import TaskSetFilter, TaskFilter, TaskSetRunFilter, TaskRunFilter, UserFilter, ProjectsFilter
 from projects.models import User, Projects, TaskSet, Task, TaskInstance, TaskRun, TaskSetRun, Menus, TaskStatus
 from projects.serializers import UserSerializer, ProjectsSerializer, TaskSetSerializer, TaskSerializer, \
     TaskInstanceSerializer, TaskRunSerializer, TaskSetRunSerializer, MenusSerializer, TaskStatusSerializer
@@ -41,18 +40,23 @@ class CustPagination(PageNumberPagination):
     page_query_param = "page"
     max_page_size = 100
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    This viewset automatically provides `list` and `detail` actions.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+# class UserViewSet(viewsets.ReadOnlyModelViewSet):
+#     """
+#     This viewset automatically provides `list` and `detail` actions.
+#     """
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    pagination_class = CustPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = UserFilter
+    search_fields = ('username',)
+    ordering_fields = ('username',)
 
 
 class CreateUserView(CreateAPIView):
@@ -116,7 +120,11 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectsSerializer
-
+    pagination_class = CustPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = ProjectsFilter
+    search_fields = ('project_name',)
+    ordering_fields = ('project_name',)
 
 class TaskSetViewSet(viewsets.ModelViewSet):
     """
