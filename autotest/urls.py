@@ -6,6 +6,7 @@ from projects.views import ActivateUser, CreateUserView
 
 urlpatterns = [
     url(r'^', include('projects.urls')),
+    url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^login/', obtain_jwt_token),
     url('^api-register/$', CreateUserView.as_view()),
     url(

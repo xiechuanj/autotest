@@ -2,15 +2,24 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-menu"></i> 项目管理</el-breadcrumb-item>
-                <el-breadcrumb-item>项目管理</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-menu"></i> 任务管理</el-breadcrumb-item>
+                <el-breadcrumb-item>测试任务</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="handle-box">
             <el-button type="primary" icon="search" @click="addProjectFormVisible=true">添加项目</el-button>
-            <el-select v-model="select_cate" placeholder="筛选项目" class="handle-select mr10" @change="handleMyProjects">
+            <el-select v-model="select_cate" placeholder="筛选项目" class="handle-select mr10" @change="handleSelectProjectsOption">
                 <el-option key="1" :disabled="disable" label="所有项目" value="所有项目"></el-option>
                 <el-option key="2" label="我的项目" value="我的项目"></el-option>
+            </el-select>
+            <el-select v-model='project' placeholder="选择项目" class="handle-select mr10" @change="handleProjects()" >
+                <el-option
+                 v-for="project in projects"
+                 :key="project.id"
+                 :disabled="disable"
+                 :label="project.project_name"
+                 :value="project.project_name">
+                 </el-option>
             </el-select>
             <el-input v-model="select_word" placeholder="搜索所有项目" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
@@ -56,11 +65,14 @@
     import editProject from './editProject.vue';
     import addProject from './addProject.vue';
 
+
     export default {
         data() {
             return {
                 url: `${api.host}/projects/`,
                 projects: [],
+                project: '',
+                projectId: 0,
                 cur_page: 1,
                 multipleSelection: [],
                 select_cate: "我的项目",
@@ -72,6 +84,7 @@
                 hide: false,
                 disable: true,
                 total: 0,
+                selectMyProject: '',
             }
         },
         created(){
@@ -102,13 +115,22 @@
             isAdmin(){
                 this.disable=(localStorage.getItem("is_superuser")==='false');
             },
-            addProject(){
-                self.$http.post(`${api.host}/projects/`, this.ruleForm)
+            getProjectIdFromName(name){
+                let self=this;
+                self.url = `${api.host}/projects/?project_name=${self.project}`
+                self.$http.get(self.url)
                     .then((response) => {
-
-                })
+                        if (response.data.count>0){
+                            self.projectId = response.data.results[0].id
+                        }
+                    })
             },
-            handleMyProjects(){
+            handleProjects(){
+                let self=this;
+                self.getProjectIdFromName(this.project);
+                console.log(self.projectId);
+            },
+            handleSelectProjectsOption(){
                 this.initUrl();
                 this.getProjects();
             },

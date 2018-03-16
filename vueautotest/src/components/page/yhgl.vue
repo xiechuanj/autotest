@@ -7,27 +7,25 @@
             </el-breadcrumb>
         </div>
         <div class="handle-box">
-            <el-button type="primary" icon="search" @click="addProjectFormVisible=true">添加用户</el-button>
+            <el-button type="primary" :disabled="disable" icon="search" @click="addUserFormVisible=true">添加用户</el-button>
             <el-input v-model="select_word" placeholder="搜索用户" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
         </div>
-        <el-table :data="users" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+        <el-table :data="users" border stripe style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="id" label="项目ID" sortable width="150">
+            <el-table-column prop="id" label="用户ID" sortable width="150">
             </el-table-column>
-            <el-table-column prop="project_name" label="项目名称" fit>
+            <el-table-column prop="username" label="用户名称">
             </el-table-column>
-            <el-table-column  label="用户" v-if="hide">
-                <template slot-scope="scope" >
-                    {{ scope.row.user }}
-                </template>
+            <el-table-column prop="email" label="用户邮箱">
             </el-table-column>
-
+            <el-table-column prop="is_superuser" label="是否管理员" :formatter="booleanFormat">
+            </el-table-column>
             <el-table-column label="操作" width="180">
                 <template scope="scope">
-                    <el-button size="small"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="small" type="danger"
+                    <el-button size="small" :disabled="disable"
+                            @click="handleEdit(scope.$index, scope.row)">激活用户</el-button>
+                    <el-button size="small" type="danger" :disabled="disable"
                             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -42,28 +40,27 @@
               :total="total">
             </el-pagination>
         </div>
-        <editProject :editProjectFormVisible.sync="editProjectFormVisible" :row=row></editProject>
-        <addProject :addProjectFormVisible.sync="addProjectFormVisible"></addProject>
+<!--         <editProject :editProjectFormVisible.sync="editProjectFormVisible" :row=row></editProject> -->
+        <addUser :addUserFormVisible.sync="addUserFormVisible"></addUser>
     </div>
 </template>
 
 <script>
     import api from '../../api/api.js';
-    import editProject from './editProject.vue';
-    import addProject from './addProject.vue';
+    import addUser from './addUser.vue';
 
     export default {
         data() {
             return {
                 url: `${api.host}/users/`,
-                projects: [],
+                users: [],
                 cur_page: 1,
                 multipleSelection: [],
                 select_cate: "我的项目",
                 select_word: '',
                 del_list: [],
-                editProjectFormVisible: false,
-                addProjectFormVisible: false,
+                editUserFormVisible: false,
+                addUserFormVisible: false,
                 row: {},
                 hide: false,
                 disable: true,
@@ -72,59 +69,54 @@
         },
         created(){
             this.initUrl();
-            this.getProjects();
+            this.getUsers();
             this.isAdmin();
         },
         computed: {
 
         },
         components: {
-            editProject,
-            addProject
+            addUser
         },
         methods: {
             initUrl(val){
-                this.url = `${api.host}/projects/`;
+                this.url = `${api.host}/users/`;
                 this.url=this.url + `?page=${this.cur_page}`;
-                if (this.select_cate === "我的项目"){
-                    let userid = localStorage.getItem("ms_userid");
-                    this.url=this.url + `&user=${userid}`;
-                }
 
                 if (val === "search"){
                     this.url=this.url + `&search=${this.select_word}`;
                 }
             },
+            booleanFormat(row, column){
+                if (row.is_superuser){
+                    return "是";
+                }else{
+                    return "否"
+                }
+            },
             isAdmin(){
                 this.disable=(localStorage.getItem("is_superuser")==='false');
             },
-            addProject(){
-                self.$http.post(`${api.host}/projects/`, this.ruleForm)
-                    .then((response) => {
-
-                })
-            },
             handleMyProjects(){
-                this.initUrl();
-                this.getProjects();
+
             },
             handleCurrentChange(val){
                 this.cur_page = val;
                 this.initUrl();
-                this.getProjects();
+                this.getUsers();
             },
-            getProjects(){
+            getUsers(){
                 let self = this;
                 self.$http.get(self.url)
                     .then((response) => {
-                        self.projects=response.data.results;
+                        self.users=response.data.results;
                         self.total = response.data.count;
                     })
             },
             search(){
                 this.cur_page = 1;
                 this.initUrl('search');
-                this.getProjects();
+                this.getUsers();
             },
             formatter(row, column) {
                 return row.address;
@@ -133,15 +125,10 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.row = row;
-                this.editProjectFormVisible = true;
+                alert("开发中。。。");
             },
             handleDelete(index, row) {
-                this.$http.delete(`${api.host}/projects/${row.id}`)
-                .then((response) => {
-                    this.getProjects();
-                })
-                this.$message.error('删除第'+(index+1)+'行');
+                alert("暂不提供删除！");
             },
             delAll(){
                 const self = this,

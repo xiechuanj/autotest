@@ -26,6 +26,18 @@ export default new Router({
                     component: resolve => require(['../components/page/xmgl.vue'], resolve)
                 },
                 {
+                    path: '/csrw',
+                    component: resolve => require(['../components/page/csrw.vue'], resolve)
+                },
+                {
+                    path: '/csjrw',
+                    component: resolve => require(['../components/page/csjrw.vue'], resolve)
+                },
+                {
+                    path: '/yxrw',
+                    component: resolve => require(['../components/page/yxrw.vue'], resolve)
+                },
+                {
                     path: '/basetable',
                     component: resolve => require(['../components/page/BaseTable.vue'], resolve)
                 },

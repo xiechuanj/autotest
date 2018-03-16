@@ -31,7 +31,7 @@
                         title: '首页'
                     },
                     {
-                        icon: 'el-icon-menu',
+                        icon: 'el-icon-setting',
                         index: '2',
                         title: '系统管理',
                         subs: [
@@ -47,7 +47,41 @@
                     },
                     {
                         icon: 'el-icon-menu',
-                        index: '2',
+                        index: '3',
+                        title: '任务管理',
+                        subs: [
+                            {
+                                index: 'csrw',
+                                title: '测试任务'
+                            },
+                            {
+                                index: 'csjrw',
+                                title: '测试集任务'
+                            },
+                            {
+                                index: 'yxrw',
+                                title: '运行任务'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-menu',
+                        index: '4',
+                        title: '任务监控',
+                        subs: [
+                            {
+                                index: 'yhgl',
+                                title: '用户管理'
+                            },
+                            {
+                                index: 'xmgl',
+                                title: '项目管理'
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-menu',
+                        index: '5',
                         title: '表格',
                         subs: [
                             {
@@ -62,7 +96,7 @@
                     },
                     {
                         icon: 'el-icon-date',
-                        index: '3',
+                        index: '6',
                         title: '表单',
                         subs: [
                             {

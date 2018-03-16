@@ -11,8 +11,6 @@
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-<!--                 <el-button  @click="submitForm('ruleForm')">注册</el-button>
-                <el-button  @click="submitForm('ruleForm')">忘记密码</el-button> -->
                 </div>
 
             </el-form>
@@ -55,10 +53,12 @@
                     if (valid) {
                         self.$http.post(`${api.host}/login/`, this.ruleForm)
                             .then((response) => {
+                                console.log(response);
                                 localStorage.setItem('ms_username',self.ruleForm.username);
                                 localStorage.setItem('token',response.data.token);
                                 self.userId();
                             })
+                        console.log("111111");
                         self.$router.replace('/readme');
                     } else {
                         console.log('error submit!!');
