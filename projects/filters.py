@@ -24,7 +24,7 @@ class TaskFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:
         model = Task
-        fields = ['task_name', ]
+        fields = ['task_name', 'projects']
 
 class TaskSetRunFilter(django_filters.rest_framework.FilterSet):
     """

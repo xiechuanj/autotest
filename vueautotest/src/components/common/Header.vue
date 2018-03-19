@@ -23,6 +23,7 @@
         computed:{
             username(){
                 let self = this;
+
                 let username = localStorage.getItem('ms_username');
                 if (username == null) {
                     self.$router.push('/login');

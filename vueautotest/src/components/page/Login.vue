@@ -44,7 +44,6 @@
                 .then((response) => {
                     localStorage.setItem('ms_userid',response.data.results[0].id);
                     localStorage.setItem('is_superuser',response.data.results[0].is_superuser);
-                    console.log(response.data.results[0].is_superuser);
                 });
             },
             submitForm(formName) {
@@ -53,12 +52,10 @@
                     if (valid) {
                         self.$http.post(`${api.host}/login/`, this.ruleForm)
                             .then((response) => {
-                                console.log(response);
                                 localStorage.setItem('ms_username',self.ruleForm.username);
                                 localStorage.setItem('token',response.data.token);
                                 self.userId();
                             })
-                        console.log("111111");
                         self.$router.replace('/readme');
                     } else {
                         console.log('error submit!!');

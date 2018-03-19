@@ -67,15 +67,19 @@
                     {
                         icon: 'el-icon-menu',
                         index: '4',
-                        title: '任务监控',
+                        title: '监控',
                         subs: [
                             {
-                                index: 'yhgl',
-                                title: '用户管理'
+                                index: 'jenkins',
+                                title: 'Jenkins监控'
                             },
                             {
-                                index: 'xmgl',
-                                title: '项目管理'
+                                index: 'sonarqube',
+                                title: 'SonarQube监控'
+                            },
+                            {
+                                index: 'harbor',
+                                title: 'Harbor监控'
                             }
                         ]
                     },
